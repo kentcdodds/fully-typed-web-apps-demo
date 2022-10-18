@@ -1,0 +1,37 @@
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id    String @id @default(cuid())
+  email String @unique
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  password Password?
+}
+
+model Password {
+  hash String
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId String @unique
+}
+
+model Workshop {
+  id          String   @id @default(cuid())
+  title       String
+  date        DateTime
+  description String
+  price       Int
+  seatsLeft   Int
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
